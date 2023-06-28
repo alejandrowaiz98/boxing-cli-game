@@ -1,11 +1,15 @@
 package entitys
 
 type Boxer struct {
-	Name   string
-	Style  string
-	Age    int
-	Weight int
-	Speed  int
+	Name  string
+	Style string
+	Stats
+}
+
+type Stats struct {
+	Speed, SpeedLevel       int
+	Strenght, StrengthLevel int
+	HP, HPLevel             int
 }
 
 var mainBoxer *Boxer
