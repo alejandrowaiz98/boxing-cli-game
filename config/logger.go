@@ -7,12 +7,18 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func GetLogger() zerolog.Logger {
+var logger zerolog.Logger
 
-	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr}).With().Caller().Logger()
+func SetLogger() {
+
+	logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr}).With().Caller().Logger()
 
 	zerolog.TimeFieldFormat = zerolog.TimeFormatUnix
 
-	return log.Logger
+}
+
+func GetLogger() zerolog.Logger {
+
+	return logger
 
 }
