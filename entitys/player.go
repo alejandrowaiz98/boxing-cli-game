@@ -1,40 +1,56 @@
 package entitys
 
-var DefaultPlayer Boxer = Boxer{
+import "log"
 
-	Stats: Stats{
-		AvoidChance:   10,
-		AvoidingLevel: 0,
-		CritChance:    10,
-		CritLevel:     0,
-		Speed:         1,
-		SpeedLevel:    0,
-		Strenght:      1,
-		StrengthLevel: 0,
-		HP:            20,
-		HPLevel:       1,
-		Defense:       1,
-		DefenseLevel:  0,
-	},
+type Player struct {
+	Name     string
+	Victorys int
+	Boxer    Boxer
 }
 
-var p Boxer = DefaultPlayer
+// Unique instance of player
+var player Player
 
-func NewPlayer(name, style string) Boxer {
+func GetPlayer() Player {
+	return player
+}
 
-	if style == "velocidad" {
+func NewPlayer(playerName, boxerName, battlecry, deathrattle, style string) *Player {
 
-		p.Stats.SpeedLevel = 2
+	player.Boxer = DefaultBoxer
 
-	} else if style == "fuerza" {
+	player.Name = playerName
 
-		p.Stats.StrengthLevel = 2
+	player.Boxer.BattleCry = battlecry
 
-	} else if style == "vida" {
+	player.Boxer.DeathRattle = deathrattle
 
-		p.Stats.HPLevel = 2
+	return &player
+
+}
+
+//TODO: Add calling to applyStatChangeForLeveling and applyStatChangeForItem
+func (p *Player) LevelUp(leveledStats []string) *Player {
+
+	for _, choosenStat := range leveledStats {
+
+		log.Println(choosenStat)
 
 	}
+
+	return p
+
+}
+
+//TODO: Create logic for each item (if choosenStat == "option" { change player.stat})
+func applyStatChangeForItem(choosenStat string, p *Player) *Player {
+
+	return p
+
+}
+
+//TODO: Create logic for each stat (if choosenStat == "option" { change player.stat})
+func applyStatChangeForLeveling(choosenStat string, p *Player) *Player {
 
 	return p
 
