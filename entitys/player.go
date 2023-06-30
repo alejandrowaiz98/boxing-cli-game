@@ -1,13 +1,26 @@
 package entitys
 
-var DefaultBoxer Boxer = Boxer{
+var DefaultPlayer Boxer = Boxer{
 
-	Stats: Stats{SpeedLevel: 1, HPLevel: 1, StrengthLevel: 1},
+	Stats: Stats{
+		AvoidChance:   10,
+		AvoidingLevel: 0,
+		CritChance:    10,
+		CritLevel:     0,
+		Speed:         1,
+		SpeedLevel:    0,
+		Strenght:      1,
+		StrengthLevel: 0,
+		HP:            20,
+		HPLevel:       1,
+		Defense:       1,
+		DefenseLevel:  0,
+	},
 }
 
-func NewPlayer(name, style string) *Boxer {
+var p Boxer = DefaultPlayer
 
-	var p *Boxer = &DefaultBoxer
+func NewPlayer(name, style string) Boxer {
 
 	if style == "velocidad" {
 
