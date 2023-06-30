@@ -8,13 +8,10 @@ func introduction() {
 	logger.Printf("---------- Antes de comenzar necesitamos algunos datos ----------")
 
 }
-
 func createMainBoxer() *entitys.Boxer {
 
 	logger.Print("Por favor dinos tu nombre:")
 	scanner.Scan()
-
-	Player.Name = scanner.Text()
 
 	logger.Print("Ahora, ¿Prefieres agilidad o fuerza?:")
 
@@ -22,13 +19,12 @@ func createMainBoxer() *entitys.Boxer {
 
 		if election := scanner.Text(); election == "agilidad" || election == "fuerza" {
 
-			Player.Style = election
+			
 
 			break
 
 		} else {
 
-			logger.Printf("Por favor %v, elige una opcion valida...", Player.Name)
 
 		}
 
