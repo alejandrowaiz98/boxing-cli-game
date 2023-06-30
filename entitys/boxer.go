@@ -8,9 +8,11 @@ import (
 )
 
 type Boxer struct {
-	Name    string
-	Style   string
-	Punches map[int]Punch
+	Name        string
+	Style       string
+	BattleCry   string
+	DeathRattle string
+	Punches     map[int]Punch
 	Stats
 }
 
@@ -21,6 +23,24 @@ type Stats struct {
 	Strenght, StrengthLevel    int
 	HP, HPLevel                int
 	Defense, DefenseLevel      int
+}
+
+var DefaultBoxer Boxer = Boxer{
+
+	Stats: Stats{
+		AvoidChance:   10,
+		AvoidingLevel: 0,
+		CritChance:    10,
+		CritLevel:     0,
+		Speed:         1,
+		SpeedLevel:    0,
+		Strenght:      1,
+		StrengthLevel: 0,
+		HP:            20,
+		HPLevel:       1,
+		Defense:       1,
+		DefenseLevel:  0,
+	},
 }
 
 func (b Boxer) AttackWith(option int) Punch {
@@ -57,21 +77,5 @@ func applyCrit(b Boxer, p Punch) Punch {
 	}
 
 	return p
-
-}
-
-var mainBoxer *Boxer
-
-func GetMainBoxer() *Boxer {
-
-	return mainBoxer
-
-}
-
-var opponentBoxer *Boxer
-
-func GetOpponentBoxer() *Boxer {
-
-	return opponentBoxer
 
 }
