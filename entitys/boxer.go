@@ -4,16 +4,20 @@ import (
 	"math/rand"
 	"time"
 
-	"github.com/alejandrowaiz98/boxing-cli-game/constants"
+	constants "github.com/alejandrowaiz98/boxing-cli-game/constants"
 )
 
 type Boxer struct {
+	Info
+	Punches map[int]Punch
+	Stats
+}
+
+type Info struct {
 	Name        string
 	Style       string
 	BattleCry   string
 	DeathRattle string
-	Punches     map[int]Punch
-	Stats
 }
 
 type Stats struct {
