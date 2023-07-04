@@ -11,55 +11,86 @@ type Tournament struct {
 	Boxers []Boxer
 }
 
-var MinorTournament Tournament = Tournament{}
+var Tournaments []Tournament = []Tournament{
+	{Name: "Minor Tournament"},
+	{Name: "Major Tournament"},
+	{Name: "World Tournament"},
+}
 
-var MajorTournament Tournament = Tournament{}
+func createTournaments() error {
 
-var WorldTournament Tournament = Tournament{}
+	for i, t := range Tournaments {
 
-func getTournament(tournament string) Tournament {
+		tournament, err := getTournament(t.Name)
+
+		if err != nil {
+			logger.Err(err).Msgf("createTournament | getTournament: %v", err)
+			return err
+		}
+
+		Tournaments[i] = tournament
+
+	}
+
+	return nil
+
+}
+
+func getTournament(tournament string) (Tournament, error) {
 
 	f, err := excelize.OpenFile(tournament + ".xlsx")
 
 	if err != nil {
 
-		logger.Err(err).Msgf("ERR opening file: %v", err)
+		logger.Err(err).Msgf("getTournament | openfile: %v", err)
 
-		panic(err)
+		return Tournament{}, err
 
 	}
+
+	var t *Tournament
 
 	rows, err := f.GetRows("Info")
 
 	if err != nil {
 
-		logger.Err(err).Msgf("ERR getting boxer info: %v", err)
+		logger.Err(err).Msgf("getTournament | getRows | info : %v", err)
 
-		panic(err)
+		return Tournament{}, err
 
 	}
 
-	t := getBoxerInfo(rows)
+	getBoxerInfo(t, rows)
 
 	rows, err = f.GetRows("Stats")
 
 	if err != nil {
 
-		logger.Err(err).Msgf("ERR getting boxer stats: %v", err)
+		logger.Err(err).Msgf("getTournament | getRows | stats: %v", err)
 
 		panic(err)
 
 	}
 
-	t = getBoxerStats(t, rows)
+	getBoxerStats(t, rows)
 
-	return *t
+	rows, err = f.GetRows("Punches")
+
+	if err != nil {
+
+		logger.Err(err).Msgf("getTournament | getRows | punches: %v", err)
+
+		panic(err)
+
+	}
+
+	getBoxerPunches(t, rows)
+
+	return *t, nil
 
 }
 
-func getBoxerInfo(rows [][]string) *Tournament {
-
-	var t *Tournament
+func getBoxerInfo(t *Tournament, rows [][]string) {
 
 	for i, columns := range rows {
 
@@ -71,15 +102,15 @@ func getBoxerInfo(rows [][]string) *Tournament {
 
 		}
 
-		for position, value := range columns {
+		for index, value := range columns {
 
-			if position == 0 {
+			if index == 0 {
 				b.Info.Name = value
-			} else if position == 1 {
+			} else if index == 1 {
 				b.Info.Style = value
-			} else if position == 2 {
+			} else if index == 2 {
 				b.Info.BattleCry = value
-			} else if position == 3 {
+			} else if index == 3 {
 				b.Info.DeathRattle = value
 			}
 
@@ -89,11 +120,9 @@ func getBoxerInfo(rows [][]string) *Tournament {
 
 	}
 
-	return t
-
 }
 
-func getBoxerStats(t *Tournament, rows [][]string) *Tournament {
+func getBoxerStats(t *Tournament, rows [][]string) {
 
 	convertToInt := func(s string) int {
 
@@ -117,31 +146,33 @@ func getBoxerStats(t *Tournament, rows [][]string) *Tournament {
 
 		}
 
-		for position, value := range columns {
+		for index, value := range columns {
 
-			if position == 0 {
+			if index == 0 {
+				continue
+			} else if index == 1 {
 				b.Stats.AvoidChance = convertToInt(value)
-			} else if position == 1 {
+			} else if index == 2 {
 				b.Stats.AvoidingLevel = convertToInt(value)
-			} else if position == 2 {
+			} else if index == 3 {
 				b.Stats.CritChance = convertToInt(value)
-			} else if position == 3 {
+			} else if index == 4 {
 				b.Stats.CritLevel = convertToInt(value)
-			} else if position == 4 {
+			} else if index == 5 {
 				b.Stats.Speed = convertToInt(value)
-			} else if position == 5 {
+			} else if index == 6 {
 				b.Stats.SpeedLevel = convertToInt(value)
-			} else if position == 6 {
+			} else if index == 7 {
 				b.Stats.Strenght = convertToInt(value)
-			} else if position == 7 {
+			} else if index == 8 {
 				b.Stats.StrengthLevel = convertToInt(value)
-			} else if position == 8 {
+			} else if index == 9 {
 				b.Stats.HP = convertToInt(value)
-			} else if position == 9 {
+			} else if index == 10 {
 				b.Stats.HPLevel = convertToInt(value)
-			} else if position == 10 {
+			} else if index == 11 {
 				b.Stats.Defense = convertToInt(value)
-			} else if position == 11 {
+			} else if index == 12 {
 				b.Stats.DefenseLevel = convertToInt(value)
 			}
 
@@ -151,6 +182,26 @@ func getBoxerStats(t *Tournament, rows [][]string) *Tournament {
 
 	}
 
-	return t
+}
+
+func getBoxerPunches(t *Tournament, rows [][]string) {
+
+	for i, columns := range rows {
+
+		if i == 0 {
+			continue
+		}
+
+		for index, value := range columns {
+
+			if index == 0 {
+				continue
+			}
+
+			t.Boxers[i].Punches[index] = AllPunches[value]
+
+		}
+
+	}
 
 }
