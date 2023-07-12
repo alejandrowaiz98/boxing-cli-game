@@ -5,6 +5,7 @@ var HPLevels map[int]int
 var StrenghtLevels map[int]int
 var DefenseLevels map[int]int
 var AvoidingLevels map[int]int
+var CritLevels map[int]int
 
 //Whenever a boxer gains a level it will be automatically added the value
 //from that level to his stats
